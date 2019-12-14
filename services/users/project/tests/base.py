@@ -7,6 +7,8 @@ app = create_app()
 
 
 class BaseTestCase(TestCase):
+    """Base Configuration for tests"""
+    
     def create_app(self):
         app.config.from_object('project.config.TestingConfig')
         return app
