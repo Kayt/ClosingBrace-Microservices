@@ -1,5 +1,7 @@
 aniso8601==7.0.0
 Click==7.0
+coverage==4.5.3
+flake8==3.7.7
 Flask==1.0.2
 Flask-RESTful==0.3.7
 Flask-SQLAlchemy==2.3.2

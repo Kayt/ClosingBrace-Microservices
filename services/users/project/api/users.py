@@ -9,6 +9,7 @@ from sqlalchemy import exc
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 api = Api(users_blueprint)
 
+
 class UserPing(Resource):
     def get(self):
         return {
@@ -37,12 +38,13 @@ class UsersList(Resource):
                 response_object['message'] = f'{email} was added!'
                 return response_object, 201
             else:
-                response_object['message'] = 'Sorry. That email already exists.'
+                response_object['message'] = '''Sorry. That
+                            email already exists.'''
                 return response_object, 400
         except exc.IntegrityError:
             db.session.rollback()
             return response_object, 400
-    
+
     def get(self):
         """Get all users"""
         response_object = {
@@ -79,11 +81,13 @@ class Users(Resource):
         except ValueError:
             return response_object, 404
 
+
 api.add_resource(UserPing, '/users/ping')
 api.add_resource(UsersList, '/users')
 api.add_resource(Users, '/users/<user_id>')
 
-@users_blueprint.route('/',methods=['GET', 'POST'])
+
+@users_blueprint.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         username = request.form['username']

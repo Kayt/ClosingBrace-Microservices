@@ -6,6 +6,7 @@ from project.api.models import User
 
 from project.tests.base import BaseTestCase
 
+
 def add_user(username, email):
     user = User(username=username, email=email)
     db.session.add(user)
@@ -37,7 +38,7 @@ class TestUserService(BaseTestCase):
             )
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 201)
-            self.assertIn('achim@closinbrace was added!', data['message'])
+            self.assertIn('achim@closinbrace.com was added!', data['message'])
             self.assertIn('success', data['status'])
 
     def test_add_user_invalid_json(self):
@@ -78,7 +79,7 @@ class TestUserService(BaseTestCase):
             self.assertIn('achim', data['data']['username'])
             self.assertIn('achim@closinbrace.com', data['data']['email'])
             self.assertIn('success', data['status'])
-    
+
     def test_single_user_no_id(self):
         """Ensure error is thrown if an id is not provided."""
         with self.client:
@@ -96,7 +97,7 @@ class TestUserService(BaseTestCase):
             self.assertEqual(response.status_code, 404)
             self.assertIn('User does not exist', data['message'])
             self.assertIn('fail', data['status'])
-    
+
     def test_main_no_users(self):
         """Ensure the main route behaves correctly when no users have been
         added to the database."""
