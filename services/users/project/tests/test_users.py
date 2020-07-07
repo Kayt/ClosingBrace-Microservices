@@ -5,13 +5,7 @@ from project import db
 from project.api.models import User
 
 from project.tests.base import BaseTestCase
-
-
-def add_user(username, email):
-    user = User(username=username, email=email)
-    db.session.add(user)
-    db.session.commit()
-    return user
+from project.tests.utils import add_user
 
 
 class TestUserService(BaseTestCase):
@@ -32,7 +26,8 @@ class TestUserService(BaseTestCase):
                 '/users',
                 data=json.dumps({
                     'username': 'achim',
-                    'email': 'achim@closinbrace.com'
+                    'email': 'achim@closinbrace.com',
+                    'password': 'greaterthaneight'
                 }),
                 content_type='application/json',
             )
@@ -61,7 +56,7 @@ class TestUserService(BaseTestCase):
         with self.client:
             response = self.client.post(
                 '/users',
-                data=json.dumps({'email': 'achim@closinbrace.com'}),
+                data=json.dumps(dict(username='achim', email='achim@closinbrace.com')),
                 content_type='application/json',
             )
             data = json.loads(response.data.decode())
@@ -71,7 +66,7 @@ class TestUserService(BaseTestCase):
 
     def test_single_user(self):
         """Ensure get single user behaves correctly."""
-        user = add_user('achim', 'achim@closinbrace.com')
+        user = add_user('achim', 'achim@closinbrace.com', 'greaterthaneight')
         with self.client:
             response = self.client.get(f'/users/{user.id}')
             data = json.loads(response.data.decode())
@@ -109,8 +104,8 @@ class TestUserService(BaseTestCase):
     def test_main_with_users(self):
         """Ensure the main route behaves correctly when users have been
         added to the database."""
-        add_user('achim', 'achim@closinbrace.com')
-        add_user('ashton', 'ashton@notreal.com')
+        add_user('achim', 'achim@closinbrace.com', 'greaterthaneight')
+        add_user('ashton', 'ashton@notreal.com', 'greaterthaneight')
         with self.client:
             response = self.client.get('/')
             self.assertEqual(response.status_code, 200)
@@ -121,8 +116,8 @@ class TestUserService(BaseTestCase):
 
     def test_all_users(self):
         """Ensure get all users behaves correctly."""
-        add_user('achim', 'achim@closinbrace.com')
-        add_user('ashton', 'ashton@notreal.com')
+        add_user('achim', 'achim@closinbrace.com', 'greaterthaneight')
+        add_user('ashton', 'ashton@notreal.com', 'greaterthaneight')
         with self.client:
             response = self.client.get('/users')
             data = json.loads(response.data.decode())
