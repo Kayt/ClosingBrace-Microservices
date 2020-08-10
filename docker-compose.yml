@@ -48,6 +48,7 @@ services:
       - '/usr/src/app/node_modules'
     ports: 
       - 3007:3000
+    stdin_open: true
     environment:
       - NODE_ENV=development
       - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
